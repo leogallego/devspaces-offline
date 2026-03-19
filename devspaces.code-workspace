@@ -1,20 +1,22 @@
 {
     "folders": [
         {
-            "name": "devspaces-example",
-            "path": "/projects/devspaces-example"
+            "name": "devspaces-offline",
+            "path": "/projects/devspaces-offline"
         }
     ],
-    "extensions": {
-        "recommendations": [
-            "redhat.vscode-yaml",
-            "ms-python.python",
-            "redhat.ansible",
-            "redhat.vscode-openshift-connector",
-            "ms-python.black-formatter",
-            "sst-dev.opencode"
-        ]
-    },
+    // Extensions are installed offline via devfile postStart command.
+    // Recommendations disabled — they require Open VSX Registry access.
+    // "extensions": {
+    //     "recommendations": [
+    //         "redhat.vscode-yaml",
+    //         "ms-python.python",
+    //         "redhat.ansible",
+    //         "redhat.vscode-openshift-connector",
+    //         "ms-python.black-formatter",
+    //         "sst-dev.opencode"
+    //     ]
+    // },
     "settings": {
         "editor.wordWrap": "on",
         "files.associations": {
@@ -36,13 +38,14 @@
         "[python]": {
             "editor.defaultFormatter": "ms-python.black-formatter"
         },
-        "redhat.telemetry.enabled": true,
+        "redhat.telemetry.enabled": false,
         "ansible.executionEnvironment.containerEngine": "podman",
-        "git.autofetch": true,
+        "git.autofetch": false,
         "ansible.lightspeed.enabled": false,
-        "terminal.integrated.scrollback": 10000,
-        "openshiftToolkit.showWelcomePage": false,
-        "openshiftToolkit.searchForToolsInPath": true,
-        "openshiftToolkit.execMaxBufferLength": 10
+        "terminal.integrated.scrollback": 10000
+        // OpenShift Toolkit settings — uncomment if the extension is installed.
+        // "openshiftToolkit.showWelcomePage": false,
+        // "openshiftToolkit.searchForToolsInPath": true,
+        // "openshiftToolkit.execMaxBufferLength": 10
     }
 }
