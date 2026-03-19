@@ -60,44 +60,15 @@ commands:
         CODE_BIN="";
         RETRIES=0;
         while [ -z "$CODE_BIN" ] && [ "$RETRIES" -lt 30 ]; do
-          for candidate in
-            /checode/checode-linux-libc/bin/remote-cli/code
-            /checode/checode-linux-musl/bin/remote-cli/code
-            $(command -v code 2>/dev/null || true)
-            $(command -v code-oss 2>/dev/null || true)
-            $(command -v che-code 2>/dev/null || true)
-            $(command -v code-server 2>/dev/null || true);
-          do
-            if [ -n "$candidate" ] && [ -x "$candidate" ]; then
-              CODE_BIN="$candidate";
-              break;
-            fi;
-          done;
-          if [ -z "$CODE_BIN" ]; then
-            RETRIES=$((RETRIES + 1));
-            echo "Waiting for code CLI to become available (attempt $RETRIES/30)...";
-            sleep 2;
-          fi;
+        for candidate in /checode/checode-linux-libc/bin/remote-cli/code /checode/checode-linux-musl/bin/remote-cli/code $(command -v code 2>/dev/null || true) $(command -v code-oss 2>/dev/null || true) $(command -v che-code 2>/dev/null || true) $(command -v code-server 2>/dev/null || true); do
+        if [ -n "$candidate" ] && [ -x "$candidate" ]; then CODE_BIN="$candidate"; break; fi;
         done;
-        if [ -z "$CODE_BIN" ]; then
-          echo "WARN: No code CLI found after 60s. Extensions not installed." >&2;
-          exit 0;
-        fi;
+        if [ -z "$CODE_BIN" ]; then RETRIES=$((RETRIES + 1)); echo "Waiting for code CLI (attempt $RETRIES/30)..."; sleep 2; fi;
+        done;
+        if [ -z "$CODE_BIN" ]; then echo "WARN: No code CLI found after 60s. Extensions not installed." >&2; exit 0; fi;
         echo "Found code CLI: $CODE_BIN";
-        for vsix in
-          "$EXT_DIR"/redhat.vscode-yaml-*.vsix
-          "$EXT_DIR"/ms-python.vscode-python-envs-*.vsix
-          "$EXT_DIR"/ms-python.debugpy-*.vsix
-          "$EXT_DIR"/ms-python.python-*.vsix
-          "$EXT_DIR"/redhat.ansible-*.vsix
-          "$EXT_DIR"/ms-python.black-formatter-*.vsix;
-        do
-          if [ -f "$vsix" ]; then
-            echo "Installing: $vsix";
-            "$CODE_BIN" --install-extension "$vsix" --force || echo "WARN: Failed to install $vsix";
-          else
-            echo "SKIP: $vsix not found";
-          fi;
+        for vsix in "$EXT_DIR"/redhat.vscode-yaml-*.vsix "$EXT_DIR"/ms-python.vscode-python-envs-*.vsix "$EXT_DIR"/ms-python.debugpy-*.vsix "$EXT_DIR"/ms-python.python-*.vsix "$EXT_DIR"/redhat.ansible-*.vsix "$EXT_DIR"/ms-python.black-formatter-*.vsix; do
+        if [ -f "$vsix" ]; then echo "Installing: $vsix"; "$CODE_BIN" --install-extension "$vsix" --force || echo "WARN: Failed to install $vsix"; else echo "SKIP: $vsix not found"; fi;
         done;
         echo "Offline extension installation complete."
       workingDir: /projects
