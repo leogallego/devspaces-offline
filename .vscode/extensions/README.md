@@ -19,7 +19,11 @@ Download these from [Open VSX Registry](https://open-vsx.org/) or your internal 
 
 | Extension | Open VSX ID | Version | Required by |
 |-----------|-------------|---------|-------------|
-| Python Environments | `ms-python.vscode-python-envs` | 1.22.0 | `redhat.ansible`, `ms-python.python` |
+| Python Environments | `ms-python.vscode-python-envs` | 1.10.0 | `redhat.ansible`, `ms-python.python` |
+
+> **Note:** `vscode-python-envs` latest is 1.22.0 but requires VS Code `^1.110.0`.
+> Dev Spaces 3.26.1 ships che-code 1.104.3, so we use 1.10.0 (last version compatible
+> with `^1.104.0`). See `docs/extension-compatibility-report.md` for details.
 | Python Debugger | `ms-python.debugpy` | 2025.18.0 | `ms-python.python` |
 
 ### Optional (commented out in download script)
@@ -37,7 +41,7 @@ Download these from [Open VSX Registry](https://open-vsx.org/) or your internal 
   redhat.ansible-26.3.0.vsix
   ms-python.python-2026.4.0.vsix
   ms-python.black-formatter-2025.2.0.vsix
-  ms-python.vscode-python-envs-1.22.0.vsix
+  ms-python.vscode-python-envs-1.10.0.vsix
   ms-python.debugpy-2025.18.0@linux-x64.vsix
 ```
 

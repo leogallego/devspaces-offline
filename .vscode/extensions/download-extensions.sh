@@ -17,7 +17,7 @@ EXTENSIONS=(
   "redhat/ansible 26.3.0"
   "ms-python/python 2026.4.0"
   "ms-python/black-formatter 2025.2.0"
-  "ms-python/vscode-python-envs 1.22.0"
+  "ms-python/vscode-python-envs 1.10.0"
   # OpenShift Toolkit (187MB) and its dependency — optional, uncomment if you need
   # cluster browsing from the editor. The oc/kubectl CLIs are available in the terminal.
   # "redhat/vscode-redhat-account 0.2.0"
