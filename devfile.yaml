@@ -56,35 +56,41 @@ commands:
     exec:
       component: dev-tools
       commandLine: >-
-        EXT_DIR="/projects/devspaces-offline/.vscode/extensions" &&
-        CODE_BIN="" &&
-        for candidate in
-          /checode/checode-linux-libc/bin/remote-cli/code
-          /checode/checode-linux-musl/bin/remote-cli/code
-          $(which code 2>/dev/null)
-          $(which code-oss 2>/dev/null)
-          $(which che-code 2>/dev/null)
-          $(which code-server 2>/dev/null);
-        do
-          if [ -x "$candidate" ]; then
-            CODE_BIN="$candidate";
-            break;
+        EXT_DIR="/projects/devspaces-offline/.vscode/extensions";
+        CODE_BIN="";
+        RETRIES=0;
+        while [ -z "$CODE_BIN" ] && [ "$RETRIES" -lt 30 ]; do
+          for candidate in
+            /checode/checode-linux-libc/bin/remote-cli/code
+            /checode/checode-linux-musl/bin/remote-cli/code
+            $(command -v code 2>/dev/null || true)
+            $(command -v code-oss 2>/dev/null || true)
+            $(command -v che-code 2>/dev/null || true)
+            $(command -v code-server 2>/dev/null || true);
+          do
+            if [ -n "$candidate" ] && [ -x "$candidate" ]; then
+              CODE_BIN="$candidate";
+              break;
+            fi;
+          done;
+          if [ -z "$CODE_BIN" ]; then
+            RETRIES=$((RETRIES + 1));
+            echo "Waiting for code CLI to become available (attempt $RETRIES/30)...";
+            sleep 2;
           fi;
-        done &&
+        done;
         if [ -z "$CODE_BIN" ]; then
-          echo "ERROR: No code CLI binary found. Searched: code, code-oss, che-code, code-server, /checode/*/bin/remote-cli/code" >&2;
-          exit 1;
-        fi &&
-        echo "Found code CLI: $CODE_BIN" &&
+          echo "WARN: No code CLI found after 60s. Extensions not installed." >&2;
+          exit 0;
+        fi;
+        echo "Found code CLI: $CODE_BIN";
         for vsix in
           "$EXT_DIR"/redhat.vscode-yaml-*.vsix
           "$EXT_DIR"/ms-python.vscode-python-envs-*.vsix
           "$EXT_DIR"/ms-python.debugpy-*.vsix
           "$EXT_DIR"/ms-python.python-*.vsix
-          "$EXT_DIR"/redhat.vscode-redhat-account-*.vsix
           "$EXT_DIR"/redhat.ansible-*.vsix
-          "$EXT_DIR"/ms-python.black-formatter-*.vsix
-          "$EXT_DIR"/redhat.vscode-openshift-connector-*.vsix;
+          "$EXT_DIR"/ms-python.black-formatter-*.vsix;
         do
           if [ -f "$vsix" ]; then
             echo "Installing: $vsix";
@@ -92,7 +98,7 @@ commands:
           else
             echo "SKIP: $vsix not found";
           fi;
-        done &&
+        done;
         echo "Offline extension installation complete."
       workingDir: /projects
 events:
