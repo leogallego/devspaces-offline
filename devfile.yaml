@@ -67,6 +67,9 @@ commands:
         done;
         if [ -z "$CODE_BIN" ]; then echo "WARN: No code CLI found after 60s. Extensions not installed." >&2; exit 0; fi;
         echo "Found code CLI: $CODE_BIN";
+        RETRIES=0; while [ "$RETRIES" -lt 30 ]; do curl -s -o /dev/null http://127.0.0.1:3100 && break; RETRIES=$((RETRIES + 1)); echo "Waiting for che-code server (attempt $RETRIES/30)..."; sleep 2; done;
+        if [ "$RETRIES" -ge 30 ]; then echo "WARN: che-code server not ready after 60s. Extensions not installed." >&2; exit 0; fi;
+        echo "che-code server is ready.";
         for vsix in "$EXT_DIR"/redhat.vscode-yaml-*.vsix "$EXT_DIR"/ms-python.vscode-python-envs-*.vsix "$EXT_DIR"/ms-python.debugpy-*.vsix "$EXT_DIR"/ms-python.python-*.vsix "$EXT_DIR"/redhat.ansible-*.vsix "$EXT_DIR"/ms-python.black-formatter-*.vsix; do
         if [ -f "$vsix" ]; then echo "Installing: $vsix"; "$CODE_BIN" --extensions-dir /checode/remote/extensions --install-extension "$vsix" --force || echo "WARN: Failed to install $vsix"; else echo "SKIP: $vsix not found"; fi;
         done;

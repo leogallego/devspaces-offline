@@ -5,18 +5,6 @@
             "path": "/projects/devspaces-offline"
         }
     ],
-    // Extensions are installed offline via devfile postStart command.
-    // Recommendations disabled — they require Open VSX Registry access.
-    // "extensions": {
-    //     "recommendations": [
-    //         "redhat.vscode-yaml",
-    //         "ms-python.python",
-    //         "redhat.ansible",
-    //         "redhat.vscode-openshift-connector",
-    //         "ms-python.black-formatter",
-    //         "sst-dev.opencode"
-    //     ]
-    // },
     "settings": {
         "editor.wordWrap": "on",
         "files.associations": {
@@ -43,9 +31,5 @@
         "git.autofetch": false,
         "ansible.lightspeed.enabled": false,
         "terminal.integrated.scrollback": 10000
-        // OpenShift Toolkit settings — uncomment if the extension is installed.
-        // "openshiftToolkit.showWelcomePage": false,
-        // "openshiftToolkit.searchForToolsInPath": true,
-        // "openshiftToolkit.execMaxBufferLength": 10
     }
 }
